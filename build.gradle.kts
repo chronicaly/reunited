@@ -45,3 +45,17 @@ tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
     options.release.set(21)
 }
+
+val prismModsDir = file("C:/Users/xchro/AppData/Roaming/PrismLauncher/instances/Unity/minecraft/mods")
+
+val copyBuiltJarToPrism by tasks.registering(Copy::class) {
+    group = "build"
+    description = "Copies the remapped Unity Client jar into the Unity PrismLauncher instance mods folder."
+    dependsOn(tasks.named("remapJar"))
+    from(tasks.named("remapJar"))
+    into(prismModsDir)
+}
+
+tasks.named("build") {
+    finalizedBy(copyBuiltJarToPrism)
+}
